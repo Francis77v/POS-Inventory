@@ -5,7 +5,8 @@ using System.Text;
 using Backend.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-
+using Backend.DTOs;
+using Backend.DTOs.Auth;
 namespace Backend.Services.Authentication;
 
 public class AuthServices
@@ -18,8 +19,55 @@ public class AuthServices
         manager = userManager;
         config = configuration;
     }
+
+    public async Task<APIResponseDTO<TokenDTO>> CheckUserService(LoginDTO user)
+    {
+        try
+        {
+            var result = await manager.FindByNameAsync(user.username);
+            if (result != null && await manager.CheckPasswordAsync(result, user.password))
+            {
+                var token = await GenerateJwtToken(result);
+                return new APIResponseDTO<TokenDTO>()
+                {
+                    success = true,
+                    StatusCode = 200,
+                    message = "Welcome User",
+                    data = new TokenDTO()
+                    {
+                        AccessToken = token.AccessToken,
+                        RefreshToken = token.RefreshToken
+                    }
+                };
+            }
+
+            return new APIResponseDTO<TokenDTO>()
+            {
+                success = false,
+                StatusCode = 401,
+                message = "User not found",
+                Errors = new List<string>()
+                {
+                    "Invalid User"
+                }
+            };
+        }
+        catch (Exception e)
+        {
+            return new APIResponseDTO<TokenDTO>()
+            {
+                success = false,
+                StatusCode = 500,
+                message = "Database Error",
+                Errors = new List<string>()
+                {
+                    e.Message
+                }
+            };
+        }
+    }
     
-    private async Task<string> GenerateJwtToken(Users user)
+    private async Task<TokenDTO> GenerateJwtToken(Users user)
     {
         var userRoles = await manager.GetRolesAsync(user);
 
@@ -43,6 +91,13 @@ public class AuthServices
             signingCredentials: creds
         );
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+        var refreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+
+        return new TokenDTO()
+        {
+            AccessToken = tokenString,
+            RefreshToken = refreshToken
+        };
     }
 }
