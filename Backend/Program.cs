@@ -2,7 +2,9 @@ using System.Text;
 using DotNetEnv;
 using Backend.Context;
 using Backend.Model;
+using Backend.Repository;
 using Backend.Repository.Auth;
+using Backend.Services;
 using Backend.Services.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +18,8 @@ var builder = WebApplication.CreateBuilder(args);
 //DI 
 builder.Services.AddScoped<AuthServices>();
 builder.Services.AddScoped<AuthRepository>();
+builder.Services.AddScoped<ManageUserService>();
+builder.Services.AddScoped<ManageUserRepository>();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
