@@ -1,13 +1,21 @@
 using System.Text;
 using DotNetEnv;
 using Backend.Context;
+using Backend.Model;
+using Backend.Repository.Auth;
+using Backend.Services.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Scalar.AspNetCore;
 
 Env.Load();
 var builder = WebApplication.CreateBuilder(args);
+
+//DI 
+builder.Services.AddScoped<AuthServices>();
+builder.Services.AddScoped<AuthRepository>();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -26,7 +34,7 @@ builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 // Register Identity
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<Users, IdentityRole>()
     .AddEntityFrameworkStores<MyDbContext>()
     .AddDefaultTokenProviders();
 
@@ -54,11 +62,12 @@ builder.Services.AddControllers();
 var app = builder.Build();
 
 app.MapControllers();
-
+app.MapOpenApi();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
