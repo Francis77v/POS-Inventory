@@ -10,7 +10,7 @@ namespace Backend.Controller
     {
         public async Task<APIResponseDTO<SuccessResponseDTO>> add(AddUserDTO user, [FromServices] ManageUserService service)
         {
-            var result = await service.AddUserService();
+            var result = await service.AddUserService(user);
         }
     }
 }
