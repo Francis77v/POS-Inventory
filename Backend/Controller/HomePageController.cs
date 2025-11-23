@@ -9,6 +9,7 @@ namespace Backend.Controller
     [ApiController]
     public class HomePageController : ControllerBase
     {
+        [HttpPost("login")]
         public async Task<IActionResult> login(LoginDTO user, [FromServices] AuthServices service)
         {
             try
