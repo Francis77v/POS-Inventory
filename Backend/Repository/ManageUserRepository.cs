@@ -25,11 +25,9 @@ public class ManageUserRepository
     {
         var checkUserName = await manager.FindByNameAsync(username);
         var checkEmail = await manager.FindByEmailAsync(email);
-        if (checkUserName != null && checkEmail != null)
-        {
-            return true;
-        }
 
-        return false;
+        // Return true if **either username or email exists**
+        return checkUserName != null || checkEmail != null;
     }
+
 }
