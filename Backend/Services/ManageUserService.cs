@@ -14,11 +14,11 @@ public class ManageUserService
         repository = _repository;
     }
 
-    public async Task<APIResponseDTO<string>> AddUserService(AddUserDTO user)
+    public async Task<APIResponseDTO<SuccessResponseDTO>> AddUserService(AddUserDTO user)
     {
         if (user.password != user.confirmPassword)
         {
-            return new APIResponseDTO<string>()
+            return new APIResponseDTO<SuccessResponseDTO>()
             {
                 success = false,
                 StatusCode = 404,
@@ -44,7 +44,7 @@ public class ManageUserService
             var result = await repository.AddUserRepository(mapUser);
             if (!result.Succeeded)
             {
-                return new APIResponseDTO<string>()
+                return new APIResponseDTO<SuccessResponseDTO>()
                 {
                     success = false,
                     StatusCode = 404,
@@ -56,7 +56,7 @@ public class ManageUserService
                 };
             }
 
-            return new APIResponseDTO<string>()
+            return new APIResponseDTO<SuccessResponseDTO>()
             {
                 success = true,
                 StatusCode = 200,
@@ -66,7 +66,7 @@ public class ManageUserService
         }
         catch (Exception e)
         {
-            return new APIResponseDTO<string>()
+            return new APIResponseDTO<SuccessResponseDTO>()
             {
                 success = false,
                 StatusCode = 500,
