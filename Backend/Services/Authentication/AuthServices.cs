@@ -26,11 +26,17 @@ public class AuthServices
 
     public async Task<APIResponseDTO<TokenDTO>> CheckUserService(LoginDTO user)
     {
+        var userMapping = new Users()
+        {
+            UserName = user.username,
+            PasswordHash = user.password
+        };
         try
         {
-            var result = await repository.CheckUser(user);
+            var result = await repository.CheckUserRepository(userMapping);
             if (result != null)
             {
+                var token = await GenerateJwtToken(result);
                 return new APIResponseDTO<TokenDTO>()
                 {
                     success = true,
@@ -38,8 +44,8 @@ public class AuthServices
                     message = "Welcome User",
                     data = new TokenDTO()
                     {
-                        AccessToken = result.AccessToken,
-                        RefreshToken = result.RefreshToken
+                        AccessToken = token.AccessToken,
+                        RefreshToken = token.RefreshToken
                     }
                 };
             }
