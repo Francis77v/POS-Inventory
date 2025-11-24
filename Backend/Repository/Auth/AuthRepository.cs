@@ -1,5 +1,4 @@
-using Backend.Services.Authentication;
-using Backend.DTOs.Auth;
+
 using Backend.Model;
 using Microsoft.AspNetCore.Identity;
 
@@ -12,15 +11,13 @@ public class AuthRepository
     {
         manager = userManager;
     }
-    public async Task<TokenDTO?> CheckUser(LoginDTO user)
+    public async Task<Users?> CheckUserRepository(Users user)
     {
-        var result = await manager.FindByNameAsync(user.username);
-        if (result != null && await manager.CheckPasswordAsync(result, user.password))
+        var result = await manager.FindByNameAsync(user.UserName);
+        if (result != null && await manager.CheckPasswordAsync(result, user.PasswordHash))
         {
-            var token = await service.GenerateJwtToken(result);
-            return token;
+            return result;
         }
-
         return null;
     }
     
