@@ -8,9 +8,10 @@ namespace Backend.Controller
     [ApiController]
     public class manage_userController : ControllerBase
     {
+        [HttpPost("add-user")]
         public async Task<APIResponseDTO<SuccessResponseDTO>> add(AddUserDTO user, [FromServices] ManageUserService service)
         {
-            var result = await service.AddUserService(user);
+            return await service.AddUserService(user);
         }
     }
 }
