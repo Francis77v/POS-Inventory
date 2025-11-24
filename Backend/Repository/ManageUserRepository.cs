@@ -11,17 +11,25 @@ public class ManageUserRepository
     {
         manager = _manager;
     }
-    public async Task<string> AddUserRepository(AddUserDTO user)
+    
+    public async Task<IdentityResult> AddUserRepository(Users user)
     {
-        var mapUser = new Users()
+        var exists = await CheckUserIfExist(user.UserName, user.Email);
+        if (exists)
+            return IdentityResult.Failed(new IdentityError { Description = "User exists" });
+
+        return await manager.CreateAsync(user, user.PasswordHash);
+    }
+    
+    public async Task<bool> CheckUserIfExist(string username, string email)
+    {
+        var checkUserName = await manager.FindByNameAsync(username);
+        var checkEmail = await manager.FindByEmailAsync(email);
+        if (checkUserName != null && checkEmail != null)
         {
-            UserName = user.username,
-            Email = user.email,
-            FirstName = user.firstName,
-            MiddleName = user.middleName,
-            SurName = user.surName
-        };
-        var result = await manager.CreateAsync(mapUser, user.password);
-        
+            return true;
+        }
+
+        return false;
     }
 }
