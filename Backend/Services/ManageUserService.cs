@@ -41,17 +41,18 @@ public class ManageUserService
                 SurName = user.surName,
                 PasswordHash = user.password
             };
-            var result = await repository.AddUserRepository(mapUser);
-            if (!result.Succeeded)
+            await repository.AddUserRepository(mapUser);
+            var checkUser = await repository.CheckUserIfExist(user.username, user.email);
+            if (!checkUser)
             {
                 return new APIResponseDTO<SuccessResponseDTO>()
                 {
                     success = false,
                     StatusCode = 404,
-                    message = "User already exists!",
+                    message = "Create different user credentials",
                     Errors = new List<string>()
                     {
-                        result.Errors.First().Description
+                        "User already exists in database."
                     }
                 };
             }
