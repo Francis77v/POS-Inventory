@@ -31,49 +31,40 @@ public class AuthServices
             UserName = user.username,
             PasswordHash = user.password
         };
+
         try
         {
             var result = await repository.CheckUserRepository(userMapping);
+
             if (result != null)
             {
                 var token = await GenerateJwtToken(result);
-                return new APIResponseDTO<TokenDTO>()
-                {
-                    success = true,
-                    StatusCode = 200,
-                    message = "Welcome User",
-                    data = new TokenDTO()
+
+                return APIResponseService.Success(
+                    data: new TokenDTO
                     {
                         AccessToken = token.AccessToken,
                         RefreshToken = token.RefreshToken
-                    }
-                };
+                    },
+                    message: "Welcome User"
+                );
             }
-            return new APIResponseDTO<TokenDTO>()
-            {
-                success = false,
-                StatusCode = 401,
-                message = "User not found",
-                Errors = new List<string>()
-                {
-                    "Invalid User"
-                }
-            };
+
+            return APIResponseService.Unauthorized<TokenDTO>(
+                "User not found",
+                new List<string> { "Invalid User" }
+            );
         }
         catch (Exception e)
         {
-            return new APIResponseDTO<TokenDTO>()
-            {
-                success = false,
-                StatusCode = 500,
-                message = "Database Error",
-                Errors = new List<string>()
-                {
-                    e.Message
-                }
-            };
+            return APIResponseService.Error<TokenDTO>(
+                "Database Error",
+                500,
+                new List<string> { e.Message }
+            );
         }
     }
+
     
     private async Task<TokenDTO> GenerateJwtToken(Users user)
     {

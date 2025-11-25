@@ -18,17 +18,11 @@ public class ManageUserService
     {
         if (user.password != user.confirmPassword)
         {
-            // return APIResponseService.ErrorResponseService<T>("Retry Password", 403, "Password mismatched.");
-            return new APIResponseDTO<SuccessResponseDTO>()
-            {
-                success = false,
-                StatusCode = 404,
-                message = "Retry Password",
-                Errors = new List<string>()
-                {
-                    "Password mismatched."
-                }
-            };
+            return APIResponseService.Error<SuccessResponseDTO>(
+                "Retry Password",
+                403,
+                new List<string> { "Password mismatched." }
+            );
         }
 
         try
@@ -42,41 +36,33 @@ public class ManageUserService
                 SurName = user.surName,
                 PasswordHash = user.password
             };
+
             var result = await repository.AddUserRepository(mapUser);
+
             if (!result.Succeeded)
             {
-                return new APIResponseDTO<SuccessResponseDTO>()
-                {
-                    success = false,
-                    StatusCode = 404,
-                    message = "User already exists!",
-                    Errors = new List<string>()
-                    {
-                        result.Errors.First().Description
-                    }
-                };
+                return APIResponseService.Conflict<SuccessResponseDTO>(
+                    "User already exists!",
+                    new List<string> { result.Errors.First().Description }
+                );
             }
-
-            return new APIResponseDTO<SuccessResponseDTO>()
-            {
-                success = true,
-                StatusCode = 200,
-                message = "User successfully created."
-            };
-
+            
+            return APIResponseService.Success(
+                data: new SuccessResponseDTO
+                {
+                    Data = "User successfully created."
+                },
+                message: "User successfully created."
+            );
         }
         catch (Exception e)
         {
-            return new APIResponseDTO<SuccessResponseDTO>()
-            {
-                success = false,
-                StatusCode = 500,
-                message = "Error creating user.",
-                Errors = new List<string>()
-                {
-                    e.Message
-                }
-            };
+            return APIResponseService.Error<SuccessResponseDTO>(
+                "Error creating user.",
+                500,
+                new List<string> { e.Message }
+            );
         }
     }
+
 }

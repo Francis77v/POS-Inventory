@@ -4,26 +4,40 @@ namespace Backend.Services;
 
 public static class APIResponseService
 {
-    public static APIResponseDTO<T> SuccessResponseService<T>(string message, int status_code, T data)
+    public static APIResponseDTO<T> Success<T>(string message = "Operation successful", T? data = default)
     {
-        return new APIResponseDTO<T>()
+        return new APIResponseDTO<T>
         {
             success = true,
-            StatusCode = status_code,
+            StatusCode = 200,
             message = message,
             data = data
         };
     }
     
-    public static APIResponseDTO<T> ErrorResponseService<T>(string message, int status_code, IEnumerable<string> errors = null)
+    public static APIResponseDTO<T> Error<T>(string message = "An error occurred", int statusCode = 400, List<string>? errors = null)
     {
-        return new APIResponseDTO<T>()
+        return new APIResponseDTO<T>
         {
             success = false,
-            StatusCode = status_code,
+            StatusCode = statusCode,
             message = message,
-            data = default(T),
-            Errors = errors?.ToList() ?? new List<string>()
+            Errors = errors
         };
+    }
+    
+    public static APIResponseDTO<T> NotFound<T>(string message = "Resource not found", List<string>? errors = null)
+    {
+        return Error<T>(message, 404, errors);
+    }
+
+    public static APIResponseDTO<T> Conflict<T>(string message = "Conflict occurred", List<string>? errors = null)
+    {
+        return Error<T>(message, 409, errors);
+    }
+    
+    public static APIResponseDTO<T> Unauthorized<T>(string message = "Unauthorized", List<string>? errors = null)
+    {
+        return Error<T>(message, 401, errors);
     }
 }

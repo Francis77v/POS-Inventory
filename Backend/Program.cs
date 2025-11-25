@@ -20,6 +20,7 @@ builder.Services.AddScoped<AuthServices>();
 builder.Services.AddScoped<AuthRepository>();
 builder.Services.AddScoped<ManageUserService>();
 builder.Services.AddScoped<ManageUserRepository>();
+builder.Services.AddScoped<InventoryRepository>();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
