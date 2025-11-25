@@ -15,12 +15,14 @@ using Scalar.AspNetCore;
 Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
-//DI 
-builder.Services.AddScoped<AuthServices>();
+//DI Repositories
 builder.Services.AddScoped<AuthRepository>();
-builder.Services.AddScoped<ManageUserService>();
 builder.Services.AddScoped<ManageUserRepository>();
 builder.Services.AddScoped<InventoryRepository>();
+//DI Services
+builder.Services.AddScoped<ManageUserService>();
+builder.Services.AddScoped<AuthServices>();
+builder.Services.AddScoped<InventoryServices>();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
