@@ -9,10 +9,17 @@ namespace Backend.Controller
     [ApiController]
     public class HomePageController : ControllerBase
     {
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDTO user, [FromServices] AuthServices service)
+        private readonly AuthServices _service;
+
+        public HomePageController(AuthServices service)
         {
-            var result = await service.CheckUserService(user);
+            _service = service;
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginDTO user)
+        {
+            var result = await _service.CheckUserService(user);
             return StatusCode(result.StatusCode, result);
         }
 
