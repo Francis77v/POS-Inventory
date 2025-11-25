@@ -6,8 +6,8 @@ namespace Backend.Services;
 public class InventoryServices
 {
     private readonly InventoryRepository _repository;
-    public async Task<APIResponseDTO<SuccessResponseDTO>> CreateProductService(CreateProductDTO product)
-    {
-        
-    }
+    // public async Task<APIResponseDTO<SuccessResponseDTO>> CreateProductService(CreateProductDTO product)
+    // {
+    //     
+    // }
 }

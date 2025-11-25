@@ -8,10 +8,10 @@ namespace Backend.Controller
     [ApiController]
     public class InventoryController : ControllerBase
     {
-        [HttpPost("add")]
-        public async Task<IActionResult> AddProduct(CreateProductDTO product, [FromServices] InventoryServices services)
-        {
-            
-        }
+        // [HttpPost("add")]
+        // public async Task<IActionResult> AddProduct(CreateProductDTO product, [FromServices] InventoryServices services)
+        // {
+        //     
+        // }
     }
 }
