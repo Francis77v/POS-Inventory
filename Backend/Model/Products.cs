@@ -10,8 +10,9 @@ public class Products
     public int categoryId { get; set; }
     public Category category { get; set; }
     
-    public float price { get; set; }
+    public decimal price { get; set; }
     public int stock { get; set; }
+    public decimal? cost { get; set; }
     
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     

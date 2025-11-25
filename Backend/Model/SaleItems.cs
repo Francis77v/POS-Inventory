@@ -11,6 +11,6 @@ public class SaleItems
     public Products product { get; set; }
     
     public int quantity { get; set; }
-    public float price { get; set; }
-    public float subtotal { get; set; }
+    public decimal price { get; set; }
+    public decimal subtotal { get; set; }
 }
