@@ -16,9 +16,10 @@ namespace Backend.Controller
         }
 
         [HttpPost("add-user")]
-        public async Task<APIResponseDTO<SuccessResponseDTO>> add(AddUserDTO user)
+        public async Task<IActionResult> add(AddUserDTO user)
         {
-            return await _service.AddUserService(user);
+            var result = await _service.AddUserService(user);
+            return StatusCode(result.StatusCode, result);
         }
     }
 }
