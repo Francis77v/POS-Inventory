@@ -22,6 +22,152 @@ namespace Backend.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Backend.Model.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("categoryName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("category");
+                });
+
+            modelBuilder.Entity("Backend.Model.Products", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("SKU")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("categoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<float>("price")
+                        .HasColumnType("real");
+
+                    b.Property<string>("productName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("stock")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("categoryId");
+
+                    b.ToTable("Product");
+                });
+
+            modelBuilder.Entity("Backend.Model.SaleItems", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<float>("price")
+                        .HasColumnType("real");
+
+                    b.Property<int>("productId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("saleId")
+                        .HasColumnType("integer");
+
+                    b.Property<float>("subtotal")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("productId");
+
+                    b.HasIndex("saleId");
+
+                    b.ToTable("saleItems");
+                });
+
+            modelBuilder.Entity("Backend.Model.Sales", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("cashier")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<float>("change")
+                        .HasColumnType("real");
+
+                    b.Property<float>("paymentMethod")
+                        .HasColumnType("real");
+
+                    b.Property<float>("totalAmount")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("cashier");
+
+                    b.ToTable("sales");
+                });
+
+            modelBuilder.Entity("Backend.Model.StockMovements", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("productId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("reference")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("type")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("productId");
+
+                    b.ToTable("StockMovements");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -245,6 +391,58 @@ namespace Backend.Migrations
                     b.HasDiscriminator().HasValue("Users");
                 });
 
+            modelBuilder.Entity("Backend.Model.Products", b =>
+                {
+                    b.HasOne("Backend.Model.Category", "category")
+                        .WithMany("product")
+                        .HasForeignKey("categoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("category");
+                });
+
+            modelBuilder.Entity("Backend.Model.SaleItems", b =>
+                {
+                    b.HasOne("Backend.Model.Products", "product")
+                        .WithMany("saleItems")
+                        .HasForeignKey("productId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Model.Sales", "sale")
+                        .WithMany("SalesItems")
+                        .HasForeignKey("saleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("product");
+
+                    b.Navigation("sale");
+                });
+
+            modelBuilder.Entity("Backend.Model.Sales", b =>
+                {
+                    b.HasOne("Backend.Model.Users", "user")
+                        .WithMany("Sales")
+                        .HasForeignKey("cashier")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("user");
+                });
+
+            modelBuilder.Entity("Backend.Model.StockMovements", b =>
+                {
+                    b.HasOne("Backend.Model.Products", "product")
+                        .WithMany("stocks")
+                        .HasForeignKey("productId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("product");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -294,6 +492,28 @@ namespace Backend.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Backend.Model.Category", b =>
+                {
+                    b.Navigation("product");
+                });
+
+            modelBuilder.Entity("Backend.Model.Products", b =>
+                {
+                    b.Navigation("saleItems");
+
+                    b.Navigation("stocks");
+                });
+
+            modelBuilder.Entity("Backend.Model.Sales", b =>
+                {
+                    b.Navigation("SalesItems");
+                });
+
+            modelBuilder.Entity("Backend.Model.Users", b =>
+                {
+                    b.Navigation("Sales");
                 });
 #pragma warning restore 612, 618
         }
