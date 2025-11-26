@@ -1,4 +1,5 @@
 ﻿using Backend.Context;
+using Backend.DTOs.InventoryDTO;
 using Backend.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,6 +44,27 @@ public class InventoryRepository
         
         product.SKU = SKU;
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<Dictionary<string, object?>?> GetProducyBySKU(string SKU)
+    {
+        var result = await _context.Product
+            .AsNoTracking() // read-only for performance
+            .Where(p => p.SKU == SKU)
+            .Select(p => new Dictionary<string, object?>
+            {
+                { "Id", p.Id },
+                { "Name", p.productName },
+                { "Price", p.price },
+                { "Stock", p.stock },
+                { "Cost", p.cost },
+                { "CategoryId", p.category.Id },
+                { "CategoryName", p.category.categoryName }
+            })
+            .FirstOrDefaultAsync();
+
+        return result;
+
     }
 
 

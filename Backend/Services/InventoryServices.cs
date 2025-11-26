@@ -77,4 +77,10 @@ public class InventoryServices
         }
         
     }
+
+    public async Task<APIResponseDTO<SuccessResponseDTO>> GetProductService(string SKU)
+    {
+        var product = await _repository.GetProducyBySKU(SKU);
+        
+    }
 }
