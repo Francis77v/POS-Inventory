@@ -37,10 +37,13 @@ public class InventoryRepository
 
     public async Task UpdateSKUofLastProduct(string SKU, int id)
     {
-        var product = new Products { Id = id, SKU = SKU };
-        _context.Product.Attach(product);
-        _context.Entry(product).Property(p => p.SKU).IsModified = true;
+        var product = await _context.Product.FirstOrDefaultAsync(p => p.Id == id);
+        if (product == null)
+            throw new KeyNotFoundException($"Product with ID {id} not found.");
+        
+        product.SKU = SKU;
         await _context.SaveChangesAsync();
     }
+
 
 }
