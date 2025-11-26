@@ -68,5 +68,17 @@ public class InventoryRepository
             .FirstOrDefaultAsync();
     }
 
+    public async Task DeleteProductRepository(Products sku)
+    {
+        var productDelete = await _context.Product.Where(p => p.SKU == sku.SKU).FirstOrDefaultAsync();
+        if (productDelete == null)
+        {
+            throw new Exception($"Product with SKU:{sku} Not Found");
+        }
+        
+        _context.Product.Remove(productDelete);
+        await _context.SaveChangesAsync();
+    }
+
 
 }
