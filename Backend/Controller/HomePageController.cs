@@ -1,8 +1,7 @@
-using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Mvc;
 using Backend.DTOs.Auth;
 using Backend.Services.Authentication;
-using Backend.DTOs;
 namespace Backend.Controller
 {
     [Route("api/[controller]")]

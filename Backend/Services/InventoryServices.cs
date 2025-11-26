@@ -29,7 +29,9 @@ public class InventoryServices
             productName = product.Name,
             SKU = product.SKU,
             categoryId = product.CategoryId,
-            stock = product.Stock
+            price = product.Price,
+            stock = product.Stock,
+            cost = product.Cost
         };
 
         try
@@ -45,7 +47,7 @@ public class InventoryServices
             return APIResponseService.Error<SuccessResponseDTO>(
                 message: "Failed to add product due to database error.",
                 statusCode: 500,
-                errors: new List<string> { dbEx.Message }
+                errors: new List<string> { dbEx.InnerException?.Message ?? dbEx.Message  }
             );
         }
         catch (ArgumentNullException argEx)
