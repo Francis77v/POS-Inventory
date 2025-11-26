@@ -95,6 +95,22 @@ public class InventoryServices
             );
         }
         
-        
+    }
+    
+    public async Task<APIResponseDTO<string>> DeleteProductService(SkuDTO skuDto)
+    {
+        try
+        {
+            var mapSku = new Products() { SKU = skuDto.SKU };
+            await _repository.DeleteProductRepository(mapSku);
+
+            return APIResponseService.Success(data: "Product Deleted.");
+        }
+        catch (Exception e)
+        {
+            return APIResponseService.Error<string>(message: "An unexpected error occurred while deleting the product.",
+                statusCode: 500,
+                errors: new List<string> { e.Message });
+        }
     }
 }
