@@ -39,7 +39,7 @@ public class InventoryServices
         try
         {
             await _repository.AddProductRepository(mapProduct);
-            var cat= await _categoryRepository.FetchCategory(product.CategoryId);
+            var cat= await _categoryRepository.FetchCategoryRepository(product.CategoryId);
             var prodId = await _repository.CheckLastProductName(product.Name);
             string Category = cat.Length >= 3 ? cat.Substring(0, 3) : cat;
             //SKU Format

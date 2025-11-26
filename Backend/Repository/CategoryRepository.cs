@@ -13,7 +13,7 @@ public class CategoryRepository
         _context = context;
     }
 
-    public async Task<string> FetchCategory(int id)
+    public async Task<string> FetchCategoryRepository(int id)
     {
         var result = await _context.category
             .Where(c => c.Id == id)
@@ -21,5 +21,10 @@ public class CategoryRepository
             .FirstOrDefaultAsync();
 
         return result;
+    }
+
+    public async Task CreateCategoryRepository(string categoryName)
+    {
+        
     }
 }
