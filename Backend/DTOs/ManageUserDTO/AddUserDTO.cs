@@ -32,6 +32,6 @@ public class AddUserDTO
     [MaxLength(100)]
     public string surName { get; set; }
 
-    [Required(ErrorMessage = "Role is required.")]
-    public Roles role { get; set; }
+    // [Required(ErrorMessage = "Role is required.")]
+    // public Roles role { get; set; }
 }
