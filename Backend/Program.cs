@@ -19,6 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<AuthRepository>();
 builder.Services.AddScoped<ManageUserRepository>();
 builder.Services.AddScoped<InventoryRepository>();
+builder.Services.AddScoped<CategoryRepository>();
 //DI Services
 builder.Services.AddScoped<ManageUserService>();
 builder.Services.AddScoped<AuthServices>();
