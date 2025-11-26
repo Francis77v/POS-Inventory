@@ -5,7 +5,7 @@ public class Products
     public int Id { get; set; }
     
     public string productName { get; set; }
-    public string SKU { get; set; }
+    public string? SKU { get; set; }
     
     public int categoryId { get; set; }
     public Category category { get; set; }
