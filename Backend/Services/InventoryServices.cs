@@ -17,11 +17,11 @@ public class InventoryServices
         _categoryRepository = categoryRepository;
     }
 
-    public async Task<APIResponseDTO<SuccessResponseDTO>> CreateProductService(CreateProductDTO product)
+    public async Task<APIResponseDTO<string>> CreateProductService(CreateProductDTO product)
     {
         if (await _repository.CheckProductIfExist(product.Name))
         {
-            return APIResponseService.Conflict<SuccessResponseDTO>(
+            return APIResponseService.Conflict<string>(
                 "Product already exists",
                 new List<string> { $"Product with name '{product.Name}' already exists." }
             );
@@ -46,14 +46,11 @@ public class InventoryServices
             string skuFormat = $"{Category.ToUpper()}-{product.Name.ToUpper()}-{prodId + 1}";
             await _repository.UpdateSKUofLastProduct(skuFormat, prodId);
             
-            return APIResponseService.Success(data: new SuccessResponseDTO()
-            {
-                Data = "Product Successfully added to Inventory."
-            });
+            return APIResponseService.Success(data: "Product Successfully added to Inventory.");
         }
         catch (DbUpdateException dbEx)
         {
-            return APIResponseService.Error<SuccessResponseDTO>(
+            return APIResponseService.Error<string>(
                 message: "Failed to add product due to database error.",
                 statusCode: 500,
                 errors: new List<string> { dbEx.InnerException?.Message ?? dbEx.Message  }
@@ -61,7 +58,7 @@ public class InventoryServices
         }
         catch (ArgumentNullException argEx)
         {
-            return APIResponseService.Error<SuccessResponseDTO>(
+            return APIResponseService.Error<string>(
                 message: "Product data cannot be null.",
                 statusCode: 400,
                 errors: new List<string> { argEx.Message }
@@ -69,7 +66,7 @@ public class InventoryServices
         }
         catch (Exception ex)
         {
-            return APIResponseService.Error<SuccessResponseDTO>(
+            return APIResponseService.Error<string>(
                 message: "An unexpected error occurred while adding the product.",
                 statusCode: 500,
                 errors: new List<string> { ex.Message }
@@ -78,19 +75,20 @@ public class InventoryServices
         
     }
 
-    public async Task<APIResponseDTO<SuccessResponseDTO>> GetProductService(string SKU)
+    public async Task<APIResponseDTO<FetchProductDTO>> GetProductService(SkuDTO sku)
     {
+        var mapSku = new Products()
+        {
+            SKU = sku.SKU
+        };
         try
         {
-            var product = await _repository.GetProducyBySKU(SKU);
-            return APIResponseService.Success(data: new SuccessResponseDTO()
-            {
-                Data = product
-            });
+            var product = await _repository.GetProducyBySKU(mapSku);
+            return APIResponseService.Success<FetchProductDTO>(data: product);
         }
         catch (Exception e)
         {
-            return APIResponseService.Error<SuccessResponseDTO>(
+            return APIResponseService.Error<FetchProductDTO>(
                 message: "An unexpected error occurred while adding the product.",
                 statusCode: 500,
                 errors: new List<string> { e.Message }
