@@ -51,7 +51,6 @@ namespace Backend.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SKU")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("categoryId")
