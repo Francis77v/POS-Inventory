@@ -46,25 +46,26 @@ public class InventoryRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Dictionary<string, object?>?> GetProducyBySKU(string SKU)
+    public async Task<FetchProductDTO?> GetProducyBySKU(Products SKU)
     {
-        var result = await _context.Product
-            .AsNoTracking() // read-only for performance
-            .Where(p => p.SKU == SKU)
-            .Select(p => new Dictionary<string, object?>
+        return await _context.Product
+            .AsNoTracking()
+            .Include(p => p.category) // JOIN Category
+            .Where(p => p.SKU == SKU.SKU)
+            .Select(p => new FetchProductDTO
             {
-                { "Id", p.Id },
-                { "Name", p.productName },
-                { "Price", p.price },
-                { "Stock", p.stock },
-                { "Cost", p.cost },
-                { "CategoryId", p.category.Id },
-                { "CategoryName", p.category.categoryName }
+                Id = p.Id,
+                Name = p.productName,
+                Price = p.price,
+                Stock = p.stock,
+                Cost = p.cost,
+                category = new CategoryDTO
+                {
+                    categoryId = p.category.Id,
+                    categoryName = p.category.categoryName
+                }
             })
             .FirstOrDefaultAsync();
-
-        return result;
-
     }
 
 
