@@ -9,10 +9,12 @@ namespace Backend.Services;
 public class InventoryServices
 {
     private readonly InventoryRepository _repository;
+    private readonly CategoryRepository _categoryRepository;
 
-    public InventoryServices(InventoryRepository repository)
+    public InventoryServices(InventoryRepository repository, CategoryRepository categoryRepository)
     {
         _repository = repository;
+        _categoryRepository = categoryRepository;
     }
 
     public async Task<APIResponseDTO<SuccessResponseDTO>> CreateProductService(CreateProductDTO product)
@@ -27,7 +29,7 @@ public class InventoryServices
         var mapProduct = new Products()
         {
             productName = product.Name,
-            SKU = product.SKU,
+            SKU = null,
             categoryId = product.CategoryId,
             price = product.Price,
             stock = product.Stock,
@@ -37,6 +39,12 @@ public class InventoryServices
         try
         {
             await _repository.AddProductRepository(mapProduct);
+            var cat= await _categoryRepository.FetchCategory(product.CategoryId);
+            var prodId = await _repository.CheckLastProductName(product.Name);
+            //SKU Format
+            string skuFormat = $"{cat}-{product.Name}-{prodId + 1}";
+            await _repository.UpdateSKUofLastProduct(skuFormat, prodId);
+            
             return APIResponseService.Success(data: new SuccessResponseDTO()
             {
                 Data = "Product Successfully added to Inventory."
