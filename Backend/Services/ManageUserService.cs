@@ -14,11 +14,11 @@ public class ManageUserService
         repository = _repository;
     }
 
-    public async Task<APIResponseDTO<SuccessResponseDTO>> AddUserService(AddUserDTO user)
+    public async Task<APIResponseDTO<string>> AddUserService(AddUserDTO user)
     {
         if (user.password != user.confirmPassword)
         {
-            return APIResponseService.Error<SuccessResponseDTO>(
+            return APIResponseService.Error<string>(
                 "Retry Password",
                 403,
                 new List<string> { "Password mismatched." }
@@ -41,23 +41,20 @@ public class ManageUserService
 
             if (!result.Succeeded)
             {
-                return APIResponseService.Conflict<SuccessResponseDTO>(
+                return APIResponseService.Conflict<string>(
                     "User already exists!",
                     new List<string> { result.Errors.First().Description }
                 );
             }
             
             return APIResponseService.Success(
-                data: new SuccessResponseDTO
-                {
-                    Data = "User successfully created."
-                },
+                data: "User successfully created.",
                 message: "User successfully created."
             );
         }
         catch (Exception e)
         {
-            return APIResponseService.Error<SuccessResponseDTO>(
+            return APIResponseService.Error<string>(
                 "Error creating user.",
                 500,
                 new List<string> { e.Message }

@@ -1,4 +1,5 @@
 ﻿using Backend.Context;
+using Backend.DTOs.InventoryDTO;
 using Backend.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,6 +43,40 @@ public class InventoryRepository
             throw new KeyNotFoundException($"Product with ID {id} not found.");
         
         product.SKU = SKU;
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<FetchProductDTO?> GetProducyBySKU(Products SKU)
+    {
+        return await _context.Product
+            .AsNoTracking()
+            .Include(p => p.category) // JOIN Category
+            .Where(p => p.SKU == SKU.SKU)
+            .Select(p => new FetchProductDTO
+            {
+                Id = p.Id,
+                Name = p.productName,
+                Price = p.price,
+                Stock = p.stock,
+                Cost = p.cost,
+                category = new CategoryDTO
+                {
+                    categoryId = p.category.Id,
+                    categoryName = p.category.categoryName
+                }
+            })
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task DeleteProductRepository(Products sku)
+    {
+        var productDelete = await _context.Product.Where(p => p.SKU == sku.SKU).FirstOrDefaultAsync();
+        if (productDelete == null)
+        {
+            throw new Exception($"Product with SKU:{sku} Not Found");
+        }
+        
+        _context.Product.Remove(productDelete);
         await _context.SaveChangesAsync();
     }
 
