@@ -90,7 +90,11 @@ public class InventoryServices
         }
         catch (Exception e)
         {
-            
+            return APIResponseService.Error<SuccessResponseDTO>(
+                message: "An unexpected error occurred while adding the product.",
+                statusCode: 500,
+                errors: new List<string> { e.Message }
+            );
         }
         
         
