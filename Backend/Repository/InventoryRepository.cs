@@ -25,4 +25,22 @@ public class InventoryRepository
         await _context.Product.AddAsync(product);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<int> CheckLastProductName(string productName)
+    {
+        var result = await _context.Product
+            .Where(p => p.productName == productName)
+            .Select(p => p.Id)
+            .FirstOrDefaultAsync();
+        return result;
+    }
+
+    public async Task UpdateSKUofLastProduct(string SKU, int id)
+    {
+        var product = new Products { Id = id, SKU = SKU };
+        _context.Product.Attach(product);
+        _context.Entry(product).Property(p => p.SKU).IsModified = true;
+        await _context.SaveChangesAsync();
+    }
+
 }
