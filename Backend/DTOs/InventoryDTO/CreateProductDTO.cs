@@ -8,9 +8,6 @@ public class CreateProductDTO
     [MaxLength(100, ErrorMessage = "Product name cannot exceed 100 characters.")]
     public string Name { get; set; }
 
-    [MaxLength(50, ErrorMessage = "SKU cannot exceed 50 characters.")]
-    public string? SKU { get; set; } // optional if auto-generated
-
     [Required(ErrorMessage = "Category is required.")]
     public int CategoryId { get; set; }  // FK to Categories
 
