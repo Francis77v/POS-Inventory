@@ -20,5 +20,12 @@ namespace Backend.Controller
             var result = await _services.CreateProductService(product);
             return StatusCode(result.StatusCode, result);
         }
+
+        [HttpPost("get")]
+        public async Task<IActionResult> GetProduct(SkuDTO SKU)
+        {
+            var result = await _services.GetProductService(SKU);
+            return StatusCode(result.StatusCode, result);
+        }
     }
 }
