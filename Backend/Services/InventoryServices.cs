@@ -41,8 +41,9 @@ public class InventoryServices
             await _repository.AddProductRepository(mapProduct);
             var cat= await _categoryRepository.FetchCategory(product.CategoryId);
             var prodId = await _repository.CheckLastProductName(product.Name);
+            string Category = cat.Length >= 3 ? cat.Substring(0, 3) : cat;
             //SKU Format
-            string skuFormat = $"{cat}-{product.Name}-{prodId + 1}";
+            string skuFormat = $"{Category.ToUpper()}-{product.Name.ToUpper()}-{prodId + 1}";
             await _repository.UpdateSKUofLastProduct(skuFormat, prodId);
             
             return APIResponseService.Success(data: new SuccessResponseDTO()
