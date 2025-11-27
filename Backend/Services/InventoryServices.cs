@@ -113,4 +113,27 @@ public class InventoryServices
                 errors: new List<string> { e.Message });
         }
     }
+
+    public async Task<APIResponseDTO<List<FetchProductDTO>>> FetchAllProductService()
+    {
+        try
+        {
+            var result = await _repository.FetchAllProductsRepository();
+            if (!result.Any())
+            {
+                return APIResponseService.Success<List<FetchProductDTO>>(
+                    message: "No products found.",
+                    data: new List<FetchProductDTO>()
+                );
+            }
+            return APIResponseService.Success(data: result);
+
+        }
+        catch (Exception e)
+        {
+            return APIResponseService.Error<List<FetchProductDTO>>(
+                errors: new List<string> { e.Message }
+            );
+        }
+    }
 }

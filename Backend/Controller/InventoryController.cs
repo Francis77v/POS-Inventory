@@ -34,5 +34,12 @@ namespace Backend.Controller
             var result = await _services.DeleteProductService(SKU);
             return StatusCode(result.StatusCode, result);
         }
+
+        [HttpGet("display")]
+        public async Task<IActionResult> FetchAllProduct()
+        {
+            var result = await _services.FetchAllProductService();
+            return StatusCode(result.StatusCode, result);
+        }
     }
 }
