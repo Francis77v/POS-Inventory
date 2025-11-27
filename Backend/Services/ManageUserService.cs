@@ -38,7 +38,6 @@ public class ManageUserService
             };
 
             var result = await repository.AddUserRepository(mapUser);
-
             if (!result.Succeeded)
             {
                 return APIResponseService.Conflict<string>(
