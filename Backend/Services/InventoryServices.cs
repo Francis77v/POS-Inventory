@@ -119,6 +119,13 @@ public class InventoryServices
         try
         {
             var result = await _repository.FetchAllProductsRepository();
+            if (!result.Any())
+            {
+                return APIResponseService.Success<List<FetchProductDTO>>(
+                    message: "No products found.",
+                    data: new List<FetchProductDTO>()
+                );
+            }
             return APIResponseService.Success(data: result);
 
         }
