@@ -111,11 +111,6 @@ public class InventoryRepository
 
     public async Task UpdateProductDetailsRepository(int Id, Products products)
     {
-        var product = await FIndProductById(Id);
-        if (product == null)
-        {
-            throw new Exception("Product does not exist");
-        }
         
         //update record
         product.productName = products.productName;
@@ -124,8 +119,8 @@ public class InventoryRepository
         product.cost = products.cost;
         product.price = products.price;
 
-         _context.Product.Update(product);
-         await _context.SaveChangesAsync();
+        _context.Product.Update(product);
+        await _context.SaveChangesAsync();
 
     }
     

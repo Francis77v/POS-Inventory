@@ -139,7 +139,11 @@ public class InventoryServices
 
     public async Task<APIResponseDTO<string>> UpdateProductService(int Id, UpdateProductDTO p)
     {
-        // query by id
+        var product = await _repository.FIndProductById(Id);
+        if (product == null)
+        {
+            throw new Exception("Product does not exist");
+        }
         var mapProduct = new Products()
         {
             productName = p.productName,
