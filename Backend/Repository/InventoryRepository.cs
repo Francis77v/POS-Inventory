@@ -50,11 +50,12 @@ public class InventoryRepository
     {
         return await _context.Product
             .AsNoTracking()
-            .Include(p => p.category) // JOIN Category
+            .Include(p => p.category)
             .Where(p => p.SKU == SKU.SKU)
             .Select(p => new FetchProductDTO
             {
                 Id = p.Id,
+                SKU = p.SKU,
                 Name = p.productName,
                 Price = p.price,
                 Stock = p.stock,
@@ -78,6 +79,26 @@ public class InventoryRepository
         
         _context.Product.Remove(productDelete);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<FetchProductDTO>> FetchAllProductsRepository()
+    {
+        return await _context.Product
+            .AsNoTracking()
+            .Select(p => new FetchProductDTO()
+            {
+                Id = p.Id,
+                SKU = p.SKU,
+                Name = p.productName,
+                Price = p.price,
+                Stock = p.stock,
+                Cost = p.cost,
+                category = new CategoryDTO
+                {
+                    categoryId = p.category.Id,
+                    categoryName = p.category.categoryName
+                }
+            }).ToListAsync();
     }
 
 
