@@ -136,4 +136,28 @@ public class InventoryServices
             );
         }
     }
+
+    public async Task<APIResponseDTO<string>> UpdateProductService(int Id, UpdateProductDTO p)
+    {
+        // query by id
+        var mapProduct = new Products()
+        {
+            productName = p.productName,
+            categoryId = p.categoryId,
+            stock = p.stock,
+            price = p.price,
+            cost = p.cost
+        };
+        try
+        {
+            await _repository.UpdateProductDetailsRepository(Id, mapProduct);
+            return APIResponseService.Success(data: "Product Updated Successfully.");
+        }
+        catch (Exception e)
+        {
+            return APIResponseService.Error<string>(message: "An unexpected error occurred while updating the product.",
+                statusCode: 500,
+                errors: new List<string> { e.Message });
+        }
+    }
 }
