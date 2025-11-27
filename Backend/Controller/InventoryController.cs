@@ -35,7 +35,7 @@ namespace Backend.Controller
             return StatusCode(result.StatusCode, result);
         }
 
-        [HttpPost("display")]
+        [HttpGet("display")]
         public async Task<IActionResult> FetchAllProduct()
         {
             var result = await _services.FetchAllProductService();
