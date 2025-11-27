@@ -41,5 +41,12 @@ namespace Backend.Controller
             var result = await _services.FetchAllProductService();
             return StatusCode(result.StatusCode, result);
         }
+
+        [HttpPatch("update/{Id}")]
+        public async Task<IActionResult> UpdateProduct(int Id, UpdateProductDTO product)
+        {
+            var result = await _services.UpdateProductService(Id, product);
+            return StatusCode(result.StatusCode, result);
+        }
     }
 }
