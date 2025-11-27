@@ -101,5 +101,34 @@ public class InventoryRepository
             }).ToListAsync();
     }
 
+    public async Task<Products?> FIndProductById(int Id)
+    {
+        var product = await _context.Product
+            .Where(p => p.Id == Id)
+            .FirstOrDefaultAsync();
+        return product;
+    }
+
+    public async Task UpdateProductDetailsRepository(int Id, Products products)
+    {
+        var product = await FIndProductById(Id);
+        if (product == null)
+        {
+            throw new Exception("Product does not exist");
+        }
+        
+        //update record
+        product.productName = products.productName;
+        product.categoryId = products.categoryId;
+        product.stock = products.stock;
+        product.cost = products.cost;
+        product.price = products.price;
+
+         _context.Product.Update(product);
+         await _context.SaveChangesAsync();
+
+    }
+    
+
 
 }
