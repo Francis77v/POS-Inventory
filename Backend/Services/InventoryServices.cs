@@ -144,17 +144,16 @@ public class InventoryServices
         {
             throw new Exception("Product does not exist");
         }
-        var mapProduct = new Products()
-        {
-            productName = p.productName,
-            categoryId = p.categoryId,
-            stock = p.stock,
-            price = p.price,
-            cost = p.cost
-        };
+        
+        
+        if (p.productName != null) product.productName = p.productName;
+        if (p.categoryId.HasValue) product.categoryId = p.categoryId.Value;
+        if (p.cost.HasValue) product.cost = p.cost;
+        if (p.price.HasValue) product.price = p.price.Value;
+        if (p.stock.HasValue) product.stock = p.stock.Value;
         try
         {
-            await _repository.UpdateProductDetailsRepository(Id, mapProduct);
+            await _repository.UpdateProductDetailsRepository(Id, product);
             return APIResponseService.Success(data: "Product Updated Successfully.");
         }
         catch (Exception e)
