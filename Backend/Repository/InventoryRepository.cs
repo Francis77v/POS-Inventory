@@ -109,19 +109,10 @@ public class InventoryRepository
         return product;
     }
 
-    public async Task UpdateProductDetailsRepository(int Id, Products products)
+    public async Task UpdateProductDetailsRepository(Products products)
     {
-        
-        //update record
-        product.productName = products.productName;
-        product.categoryId = products.categoryId;
-        product.stock = products.stock;
-        product.cost = products.cost;
-        product.price = products.price;
-
-        _context.Product.Update(product);
+        _context.Product.Update(products);
         await _context.SaveChangesAsync();
-
     }
     
 
