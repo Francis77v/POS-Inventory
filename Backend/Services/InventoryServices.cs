@@ -137,9 +137,9 @@ public class InventoryServices
         }
     }
 
-    public async Task<APIResponseDTO<string>> UpdateProductService(int Id, UpdateProductDTO p)
+    public async Task<APIResponseDTO<string>> UpdateProductService(int id, UpdateProductDTO p)
     {
-        var product = await _repository.FIndProductById(Id);
+        var product = await _repository.FIndProductById(id);
         if (product == null)
         {
             throw new Exception("Product does not exist");
@@ -151,9 +151,11 @@ public class InventoryServices
         if (p.cost.HasValue) product.cost = p.cost;
         if (p.price.HasValue) product.price = p.price.Value;
         if (p.stock.HasValue) product.stock = p.stock.Value;
+        var category = await _categoryRepository.FetchCategoryRepository(product.categoryId);
+        product.SKU = $"{category.Substring(0,3).ToUpper()}-{product.productName.ToUpper()}-{product.Id}";
         try
         {
-            await _repository.UpdateProductDetailsRepository(Id, product);
+            await _repository.UpdateProductDetailsRepository(product);
             return APIResponseService.Success(data: "Product Updated Successfully.");
         }
         catch (Exception e)
