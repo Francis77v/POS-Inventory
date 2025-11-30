@@ -101,5 +101,20 @@ public class InventoryRepository
             }).ToListAsync();
     }
 
+    public async Task<Products?> FIndProductById(int Id)
+    {
+        var product = await _context.Product
+            .Where(p => p.Id == Id)
+            .FirstOrDefaultAsync();
+        return product;
+    }
+
+    public async Task UpdateProductDetailsRepository(Products products)
+    {
+        _context.Product.Update(products);
+        await _context.SaveChangesAsync();
+    }
+    
+
 
 }
