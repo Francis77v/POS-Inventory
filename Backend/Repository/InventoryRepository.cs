@@ -74,7 +74,9 @@ public class InventoryRepository
         var productDelete = await _context.Product.Where(p => p.SKU == sku.SKU).FirstOrDefaultAsync();
         if (productDelete == null)
         {
-            throw new Exception($"Product with SKU:{sku} Not Found");
+            throw new KeyNotFoundException(
+                $"Product with SKU '{sku.SKU}' not found."
+            );
         }
         
         _context.Product.Remove(productDelete);
