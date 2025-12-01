@@ -28,5 +28,11 @@ namespace Backend.Controller
             var result = await _service.GetUserService();
             return StatusCode(result.StatusCode, result);
         }
+
+        [HttpPatch("patch-user/{id}")]
+        public async Task<IActionResult> update(int id, UpdateUserDTO user)
+        {
+            var result = await _service.UpdateUserService(int id, user);
+        }
     }
 }
