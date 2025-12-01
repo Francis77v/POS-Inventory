@@ -21,5 +21,12 @@ namespace Backend.Controller
             var result = await _service.AddUserService(user);
             return StatusCode(result.StatusCode, result);
         }
+
+        [HttpGet("get-user")]
+        public async Task<IActionResult> get()
+        {
+            var result = await _service.GetUserService();
+            return StatusCode(result.StatusCode, result);
+        }
     }
 }
