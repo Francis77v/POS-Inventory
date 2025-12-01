@@ -42,7 +42,7 @@ public class ManageUserRepository
                 middleName = u.MiddleName,
                 surName = u.SurName,
                 username = u.UserName,
-                password = u.PasswordHash
+
             })
             .ToListAsync();
     }
