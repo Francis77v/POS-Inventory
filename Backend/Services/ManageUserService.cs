@@ -79,4 +79,30 @@ public class ManageUserService
         }
     }
 
+    public async Task<APIResponseDTO<string>> UpdateUserService(string id, UpdateUserDTO user)
+    {
+        try
+        {
+            var result = await _repository.FetchUserById(id);
+
+            if (result == null) return APIResponseService.NotFound<string>(message: "User not found");
+
+            if (user.firstName == null) result.FirstName = user.firstName;
+            if (user.middleName == null) result.MiddleName = user.middleName;
+            if (user.surName == null) result.SurName = user.surName;
+            if (user.userName == null) result.UserName = user.userName;
+
+            await _repository.UpdateUserRepository(result);
+            return APIResponseService.Success<string>(message: "User Updated.");
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return APIResponseService.Unauthorized<string>();
+        }
+        catch (Exception e)
+        {
+            return APIResponseService.Error<string>(message: "Internal Server Error", statusCode: 500);
+        }
+    }
+
 }
