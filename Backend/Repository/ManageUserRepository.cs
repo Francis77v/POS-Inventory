@@ -46,4 +46,15 @@ public class ManageUserRepository
             .ToListAsync();
     }
 
+    public async Task UpdateUserRepository(Users user)
+    {
+        await _manager.UpdateAsync(user);
+    }
+    
+    //helper methods
+    public async Task<Users?> FetchUserById(string id)
+    {
+        return await _manager.FindByIdAsync(id);
+    }
+
 }
