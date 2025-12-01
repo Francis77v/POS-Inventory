@@ -7,6 +7,5 @@ public class GetUserDTO
     public string? middleName { get; set; }
     public string surName { get; set; }
     public string username { get; set; }
-    public string password { get; set; }
     // public string role { get; set; }
 }
