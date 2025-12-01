@@ -36,7 +36,7 @@ public static class APIResponseService
         return Error<T>(message, 409, errors);
     }
     
-    public static APIResponseDTO<T> Unauthorized<T>(string message = "Unauthorized", List<string>? errors = null)
+    public static APIResponseDTO<T> Unauthorized<T>(string message = "Unauthorized user.", List<string>? errors = null)
     {
         return Error<T>(message, 401, errors);
     }

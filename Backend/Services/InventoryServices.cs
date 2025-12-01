@@ -84,7 +84,14 @@ public class InventoryServices
         try
         {
             var product = await _repository.GetProducyBySKU(mapSku);
-            return APIResponseService.Success<FetchProductDTO>(data: product);
+            if(product == null) return APIResponseService.NotFound<FetchProductDTO>(message: "Product not found.");
+            return APIResponseService.Success(data: product);
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return APIResponseService.Unauthorized<FetchProductDTO>(
+                errors: new List<string>() {e.Message}
+                );
         }
         catch (Exception e)
         {
@@ -103,8 +110,15 @@ public class InventoryServices
         {
             var mapSku = new Products() { SKU = skuDto.SKU };
             await _repository.DeleteProductRepository(mapSku);
-
             return APIResponseService.Success(data: "Product Deleted.");
+        }
+        catch (KeyNotFoundException e)
+        {
+            return APIResponseService.NotFound<string>(message: "Product not found", errors: new List<string>() { e.Message });
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return APIResponseService.Unauthorized<string>(errors: new List<string>() {e.Message});
         }
         catch (Exception e)
         {
@@ -121,14 +135,19 @@ public class InventoryServices
             var result = await _repository.FetchAllProductsRepository();
             if (!result.Any())
             {
-                return APIResponseService.Success<List<FetchProductDTO>>(
-                    message: "No products found.",
-                    data: new List<FetchProductDTO>()
+                return APIResponseService.NotFound<List<FetchProductDTO>>(
+                    message: "No products found."
                 );
             }
+
             return APIResponseService.Success(data: result);
 
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return APIResponseService.Unauthorized<List<FetchProductDTO>>(errors: new List<string>() { e.Message });
+        }
+
         catch (Exception e)
         {
             return APIResponseService.Error<List<FetchProductDTO>>(
@@ -139,24 +158,29 @@ public class InventoryServices
 
     public async Task<APIResponseDTO<string>> UpdateProductService(int id, UpdateProductDTO p)
     {
-        var product = await _repository.FIndProductById(id);
-        if (product == null)
-        {
-            throw new Exception("Product does not exist");
-        }
-        
-        
-        if (p.productName != null) product.productName = p.productName;
-        if (p.categoryId.HasValue) product.categoryId = p.categoryId.Value;
-        if (p.cost.HasValue) product.cost = p.cost;
-        if (p.price.HasValue) product.price = p.price.Value;
-        if (p.stock.HasValue) product.stock = p.stock.Value;
-        var category = await _categoryRepository.FetchCategoryRepository(product.categoryId);
-        product.SKU = $"{category.Substring(0,3).ToUpper()}-{product.productName.ToUpper()}-{product.Id}";
         try
         {
+            var product = await _repository.FIndProductById(id);
+            if (product == null)
+            {
+                return APIResponseService.NotFound<string>(message: "Product does not exist");
+            }
+
+            if (p.productName != null) product.productName = p.productName;
+            if (p.categoryId.HasValue) product.categoryId = p.categoryId.Value;
+            if (p.cost.HasValue) product.cost = p.cost;
+            if (p.price.HasValue) product.price = p.price.Value;
+            if (p.stock.HasValue) product.stock = p.stock.Value;
+            var category = await _categoryRepository.FetchCategoryRepository(product.categoryId);
+            product.SKU = $"{category.Substring(0, 3).ToUpper()}-{product.productName.ToUpper()}-{product.Id}";
+
             await _repository.UpdateProductDetailsRepository(product);
             return APIResponseService.Success(data: "Product Updated Successfully.");
+
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return APIResponseService.Unauthorized<string>();
         }
         catch (Exception e)
         {
@@ -164,5 +188,6 @@ public class InventoryServices
                 statusCode: 500,
                 errors: new List<string> { e.Message });
         }
+        
     }
 }
