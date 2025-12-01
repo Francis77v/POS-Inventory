@@ -7,11 +7,11 @@ namespace Backend.Services;
 
 public class ManageUserService
 {
-    private readonly ManageUserRepository repository;
+    private readonly ManageUserRepository _repository;
 
-    public ManageUserService(ManageUserRepository _repository)
+    public ManageUserService(ManageUserRepository repository)
     {
-        repository = _repository;
+        _repository = repository;
     }
 
     public async Task<APIResponseDTO<string>> AddUserService(AddUserDTO user)
@@ -37,7 +37,7 @@ public class ManageUserService
                 PasswordHash = user.password
             };
 
-            var result = await repository.AddUserRepository(mapUser);
+            var result = await _repository.AddUserRepository(mapUser);
             if (!result.Succeeded)
             {
                 return APIResponseService.Conflict<string>(
@@ -58,6 +58,24 @@ public class ManageUserService
                 500,
                 new List<string> { e.Message }
             );
+        }
+    }
+
+    public async Task<APIResponseDTO<List<GetUserDTO>>> GetUserService()
+    {
+        try
+        {
+            var result = await _repository.GetUserRepository();
+            if (result == null) return APIResponseService.NotFound<List<GetUserDTO>>();
+            return APIResponseService.Success(data: result);
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return APIResponseService.Unauthorized<List<GetUserDTO>>(errors: new List<string>() {e.Message});
+        }
+        catch (Exception e)
+        {
+            return APIResponseService.Error<List<GetUserDTO>>(message: "Internal Server Error", statusCode: 500, errors: new List<string>(){e.Message});
         }
     }
 
