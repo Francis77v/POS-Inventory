@@ -84,13 +84,8 @@ public class InventoryServices
         try
         {
             var product = await _repository.GetProducyBySKU(mapSku);
-            return APIResponseService.Success<FetchProductDTO>(data: product);
-        }
-        catch (KeyNotFoundException e)
-        {
-            return APIResponseService.NotFound<FetchProductDTO>(
-                errors: new List<string>() { e.Message }
-            );
+            if(product == null) return APIResponseService.NotFound<FetchProductDTO>(message: "Product not found.");
+            return APIResponseService.Success(data: product);
         }
         catch (UnauthorizedAccessException e)
         {
@@ -115,12 +110,11 @@ public class InventoryServices
         {
             var mapSku = new Products() { SKU = skuDto.SKU };
             await _repository.DeleteProductRepository(mapSku);
-
             return APIResponseService.Success(data: "Product Deleted.");
         }
         catch (KeyNotFoundException e)
         {
-            return APIResponseService.NotFound<string>(errors: new List<string>() { e.Message });
+            return APIResponseService.NotFound<string>(message: "Product not found", errors: new List<string>() { e.Message });
         }
         catch (UnauthorizedAccessException e)
         {
