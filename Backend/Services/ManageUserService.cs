@@ -87,10 +87,10 @@ public class ManageUserService
 
             if (result == null) return APIResponseService.NotFound<string>(message: "User not found");
 
-            if (user.firstName == null) result.FirstName = user.firstName;
-            if (user.middleName == null) result.MiddleName = user.middleName;
-            if (user.surName == null) result.SurName = user.surName;
-            if (user.userName == null) result.UserName = user.userName;
+            if (user.firstName != null) result.FirstName = user.firstName;
+            if (user.middleName != null) result.MiddleName = user.middleName;
+            if (user.surName != null) result.SurName = user.surName;
+            if (user.userName != null) result.UserName = user.userName;
 
             await _repository.UpdateUserRepository(result);
             return APIResponseService.Success<string>(message: "User Updated.");
@@ -102,6 +102,27 @@ public class ManageUserService
         catch (Exception e)
         {
             return APIResponseService.Error<string>(message: "Internal Server Error", statusCode: 500);
+        }
+    }
+
+    public async Task<APIResponseDTO<string>> UpdatePasswordService(string id, PasswordDTO password)
+    {
+        try
+        {
+            var user = await _repository.FetchUserById(id);
+            if (user == null) return APIResponseService.NotFound<string>(message: "User not found");
+            await _repository.UpdatePasswordRepository(user, password.password);
+            return APIResponseService.Success<string>(message: "User password resetted");
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return APIResponseService.Unauthorized<string>(errors: new List<string>() {e.Message});
+        }
+        catch (Exception e)
+        {
+            return APIResponseService.Error<string>(
+                statusCode: 500, message: "Internal Server Error", errors: new List<string>() {e.Message}
+                );
         }
     }
 
