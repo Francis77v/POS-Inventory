@@ -30,9 +30,17 @@ namespace Backend.Controller
         }
 
         [HttpPatch("patch-user/{id}")]
-        public async Task<IActionResult> update(int id, UpdateUserDTO user)
+        public async Task<IActionResult> update(string id, UpdateUserDTO user)
         {
-            var result = await _service.UpdateUserService(int id, user);
+            var result = await _service.UpdateUserService(id, user);
+            return StatusCode(result.StatusCode, result);
+        }
+        
+        [HttpPatch("update-password/{id}")]
+        public async Task<IActionResult> updatePassword(string id, PasswordDTO password)
+        {
+            var result = await _service.UpdatePasswordService(id, password);
+            return StatusCode(result.StatusCode, result);
         }
     }
 }
