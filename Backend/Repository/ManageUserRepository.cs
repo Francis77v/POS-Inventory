@@ -50,6 +50,12 @@ public class ManageUserRepository
     {
         await _manager.UpdateAsync(user);
     }
+
+    public async Task UpdatePasswordRepository(Users user, string newPw)
+    {
+        var token = await _manager.GeneratePasswordResetTokenAsync(user);
+        await _manager.ResetPasswordAsync(user, token, newPw);
+    }
     
     //helper methods
     public async Task<Users?> FetchUserById(string id)
