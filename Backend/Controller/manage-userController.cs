@@ -42,5 +42,12 @@ namespace Backend.Controller
             var result = await _service.UpdatePasswordService(id, password);
             return StatusCode(result.StatusCode, result);
         }
+
+        [HttpDelete("delete-user/{id}")]
+        public async Task<IActionResult> deleteUser(string id)
+        {
+            var result = await _service.DeleteUserService(id);
+            return StatusCode(result.StatusCode, result);
+        }
     }
 }
