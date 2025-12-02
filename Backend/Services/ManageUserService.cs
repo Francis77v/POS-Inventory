@@ -125,5 +125,22 @@ public class ManageUserService
                 );
         }
     }
+    
+    public async Task<APIResponseDTO<string>> DeleteUserService(string id)
+    {
+        try
+        {
+            var user = await _repository.FetchUserById(id);
+            if (user == null) return APIResponseService.NotFound<string>(message: "User not found");
+            await _repository.DeleteUserRepository(user);
+            return APIResponseService.Success<string>(message: "User deleted");
+        }
+        catch (Exception e)
+        {
+            return APIResponseService.Error<string>(
+                statusCode: 500, message:"Internal Server Error", errors: new List<string>() {e.Message}
+                );
+        }
+    }
 
 }
