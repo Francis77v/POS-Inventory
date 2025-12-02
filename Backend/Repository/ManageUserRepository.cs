@@ -56,6 +56,11 @@ public class ManageUserRepository
         var token = await _manager.GeneratePasswordResetTokenAsync(user);
         await _manager.ResetPasswordAsync(user, token, newPw);
     }
+
+    public async Task DeleteUserRepository(Users user)
+    {
+        await _manager.DeleteAsync(user);
+    }
     
     //helper methods
     public async Task<Users?> FetchUserById(string id)
