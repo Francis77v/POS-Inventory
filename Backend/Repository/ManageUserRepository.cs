@@ -46,4 +46,21 @@ public class ManageUserRepository
             .ToListAsync();
     }
 
+    public async Task UpdateUserRepository(Users user)
+    {
+        await _manager.UpdateAsync(user);
+    }
+
+    public async Task UpdatePasswordRepository(Users user, string newPw)
+    {
+        var token = await _manager.GeneratePasswordResetTokenAsync(user);
+        await _manager.ResetPasswordAsync(user, token, newPw);
+    }
+    
+    //helper methods
+    public async Task<Users?> FetchUserById(string id)
+    {
+        return await _manager.FindByIdAsync(id);
+    }
+
 }
