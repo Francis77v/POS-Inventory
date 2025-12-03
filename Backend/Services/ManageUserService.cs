@@ -135,6 +135,10 @@ public class ManageUserService
             await _repository.DeleteUserRepository(user);
             return APIResponseService.Success<string>(message: "User deleted");
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return APIResponseService.Unauthorized<string>(errors: new List<string>(){e.Message});
+        }
         catch (Exception e)
         {
             return APIResponseService.Error<string>(
@@ -142,5 +146,6 @@ public class ManageUserService
                 );
         }
     }
+    
 
 }
