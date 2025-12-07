@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Backend.Model;
+﻿using Backend.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-
+using Backend.Context.Seeders;
 namespace Backend.Context;
 
 public partial class MyDbContext : IdentityDbContext<IdentityUser, IdentityRole, string>
@@ -27,6 +25,9 @@ public partial class MyDbContext : IdentityDbContext<IdentityUser, IdentityRole,
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        
+        //Role seeder
+        Seeders.Seeders.RoleSeeder(modelBuilder);
         
         //Category 1:M Products
         modelBuilder.Entity<Category>()
