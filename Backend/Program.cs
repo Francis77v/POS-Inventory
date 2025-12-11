@@ -69,19 +69,17 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
+app.UseHttpsRedirection();
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 app.MapOpenApi();
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
-    
     app.MapScalarApiReference();
 }
-
-app.UseHttpsRedirection();
-
-
-
 
 app.Run();
 
