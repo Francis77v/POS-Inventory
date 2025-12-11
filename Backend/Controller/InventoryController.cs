@@ -1,5 +1,6 @@
 using Backend.DTOs.InventoryDTO;
 using Backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controller
@@ -34,7 +35,8 @@ namespace Backend.Controller
             var result = await _services.DeleteProductService(SKU);
             return StatusCode(result.StatusCode, result);
         }
-
+        
+        [AllowAnonymous]
         [HttpGet("display")]
         public async Task<IActionResult> FetchAllProduct()
         {
