@@ -15,6 +15,7 @@ namespace Backend.Controller
             _services = services;
         }
         
+        [Authorize(Roles = "Admin")]
         [HttpPost("add")]
         public async Task<IActionResult> AddProduct(CreateProductDTO product)
         {
@@ -22,6 +23,7 @@ namespace Backend.Controller
             return StatusCode(result.StatusCode, result);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("get")]
         public async Task<IActionResult> GetProduct(SkuDTO SKU)
         {
@@ -29,6 +31,7 @@ namespace Backend.Controller
             return StatusCode(result.StatusCode, result);
         }
         
+        [Authorize(Roles = "Admin")]
         [HttpDelete("delete")]
         public async Task<IActionResult> DeleteProduct(SkuDTO SKU)
         {
@@ -44,6 +47,7 @@ namespace Backend.Controller
             return StatusCode(result.StatusCode, result);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPatch("update/{Id}")]
         public async Task<IActionResult> UpdateProduct(int Id, UpdateProductDTO product)
         {
