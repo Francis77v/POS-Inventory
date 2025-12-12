@@ -2,6 +2,7 @@ using Backend.DTOs.ManageUserDTO;
 using Microsoft.AspNetCore.Mvc;
 using Backend.DTOs;
 using Backend.Services;
+using Backend.Services.UserService;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Backend.Controller
