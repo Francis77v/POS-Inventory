@@ -1,8 +1,7 @@
 ﻿using Backend.Context;
-using Backend.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backend.Repository;
+namespace Backend.Repository.CategoryRepository;
 
 public class CategoryRepository
 {
