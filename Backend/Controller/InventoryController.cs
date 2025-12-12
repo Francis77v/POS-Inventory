@@ -36,7 +36,7 @@ namespace Backend.Controller
             return StatusCode(result.StatusCode, result);
         }
         
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         [HttpGet("display")]
         public async Task<IActionResult> FetchAllProduct()
         {
