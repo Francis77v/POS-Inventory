@@ -1,5 +1,6 @@
 using Backend.DTOs.InventoryDTO;
 using Backend.Services;
+using Backend.Services.InventoryService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
