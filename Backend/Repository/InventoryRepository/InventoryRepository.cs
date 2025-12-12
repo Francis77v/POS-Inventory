@@ -3,9 +3,9 @@ using Backend.DTOs.InventoryDTO;
 using Backend.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backend.Repository;
+namespace Backend.Repository.InventoryRepository;
 
-public class InventoryRepository
+public class InventoryRepository : IInventoryRepository
 {
     private readonly MyDbContext _context;
 

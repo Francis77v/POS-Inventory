@@ -2,8 +2,9 @@ using Backend.DTOs;
 using Backend.DTOs.ManageUserDTO;
 using Backend.Model;
 using Backend.Repository;
+using Backend.Repository.UserRepository;
 
-namespace Backend.Services;
+namespace Backend.Services.UserService;
 
 public class ManageUserService
 {

@@ -1,10 +1,11 @@
+using Backend.DTOs.ManageUserDTO;
 using Backend.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backend.Repository;
-using Backend.DTOs.ManageUserDTO;
-public class ManageUserRepository
+namespace Backend.Repository.UserRepository;
+
+public class ManageUserRepository : IUserRepository
 {
     private readonly UserManager<Users> _manager;
 

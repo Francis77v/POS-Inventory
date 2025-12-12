@@ -1,10 +1,12 @@
 ﻿using Backend.DTOs;
 using Backend.DTOs.InventoryDTO;
-using Backend.Repository;
 using Backend.Model;
+using Backend.Repository;
+using Backend.Repository.CategoryRepository;
+using Backend.Repository.InventoryRepository;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backend.Services;
+namespace Backend.Services.InventoryService;
 
 public class InventoryServices
 {
