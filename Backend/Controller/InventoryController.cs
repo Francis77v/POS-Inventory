@@ -23,7 +23,7 @@ namespace Backend.Controller
             return StatusCode(result.StatusCode, result);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpPost("get")]
         public async Task<IActionResult> GetProduct(SkuDTO SKU)
         {
@@ -39,7 +39,7 @@ namespace Backend.Controller
             return StatusCode(result.StatusCode, result);
         }
         
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpGet("display")]
         public async Task<IActionResult> FetchAllProduct()
         {
