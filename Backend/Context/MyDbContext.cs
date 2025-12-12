@@ -27,7 +27,7 @@ public partial class MyDbContext : IdentityDbContext<IdentityUser, IdentityRole,
         base.OnModelCreating(modelBuilder);
         
         //Role seeder
-        Seeders.Seeders.RoleSeeder(modelBuilder);
+        Seeders.Seeders.DataSeeder(modelBuilder);
         
         //Category 1:M Products
         modelBuilder.Entity<Category>()
