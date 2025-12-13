@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Repository.UserRepository;
 
-public class ManageUserRepository : IUserRepository
+public class ManageUserRepository : IManageUserRepository
 {
     private readonly UserManager<Users> _manager;
 
