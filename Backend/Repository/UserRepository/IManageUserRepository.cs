@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Backend.Repository.UserRepository;
 
-public interface IUserRepository
+public interface IManageUserRepository
 {
     Task<IdentityResult> AddUserRepository(Users user);
 

@@ -8,9 +8,9 @@ namespace Backend.Services.UserService;
 
 public class ManageUserService
 {
-    private readonly ManageUserRepository _repository;
+    private readonly IManageUserRepository _repository;
 
-    public ManageUserService(ManageUserRepository repository)
+    public ManageUserService(IManageUserRepository repository)
     {
         _repository = repository;
     }
