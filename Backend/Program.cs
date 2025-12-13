@@ -22,7 +22,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 //DI Repositories
 builder.Services.AddScoped<AuthRepository>();
-builder.Services.AddScoped<ManageUserRepository>();
+builder.Services.AddScoped<IManageUserRepository, ManageUserRepository>();
 builder.Services.AddScoped<InventoryRepository>();
 builder.Services.AddScoped<CategoryRepository>();
 //DI Services
